@@ -13,7 +13,7 @@ public class Artist {
 
     @JsonIgnoreProperties("artist")
     @OneToMany(mappedBy="artist", fetch=FetchType.EAGER)
-    private Set<Album> albums= new HashSet<Album>();
+    private Set<Album> albums= new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
