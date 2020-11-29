@@ -17,17 +17,25 @@ import java.util.Optional;
 @RequestMapping("/albums")
 public class AlbumControlleur {
     @Autowired
-    private static AlbumRepository albumRepository;
+    private AlbumRepository albumRepository;
 
 
-    public static AlbumRepository getAlbumRepository(){return albumRepository;};
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Album createAlbum(@RequestBody Album album)//Request body map les request json, pour transformer du json en java
     {
-        if(album.getTitle().isEmpty()){throw new EntityNotFoundException("Vous n'avez pas mis le titre de l'album !");}
         albumRepository.save(album);
         return album;
+    }
+
+
+    @RequestMapping(method = RequestMethod.DELETE, value="/{id}")//pas produces car on renvoit rien
+    @ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal
+    public void deleteAlbum(@PathVariable Long id)
+    {
+        //delete les albums de l'artistes en prems
+
+        albumRepository.deleteById(id);
     }
 }

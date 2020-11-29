@@ -12,7 +12,7 @@ import java.util.Set;
 public class Artist {
 
     @JsonIgnoreProperties("artist")
-    @OneToMany(mappedBy="artist", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="artist", fetch=FetchType.EAGER, cascade = CascadeType.ALL)//CascadeType.ALL= suppression si demande de suppression d'artiste
     private Set<Album> albums= new HashSet<>();
 
     @Id

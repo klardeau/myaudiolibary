@@ -84,7 +84,7 @@ public class ArtistControlleur {
             throw new EntityNotFoundException("L'artiste d'identifiant: "+id+" n'a pas été trouvé !");
         }
         //delete les albums de l'artistes en prems
-        AlbumControlleur.getAlbumRepository().deleteByArtistId(id);
+
         artistRepository.deleteById(id);
     }
 
