@@ -4,6 +4,7 @@ import com.myaudiolibary.web.model.Album;
 import com.myaudiolibary.web.model.Artist;
 import com.myaudiolibary.web.repository.AlbumRepository;
 import com.myaudiolibary.web.repository.ArtistRepository;
+import com.myaudiolibary.web.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("/albums")
 public class AlbumControlleur {
     @Autowired
-    private AlbumRepository albumRepository;
+    private AlbumService albumService;
 
 
 
@@ -25,17 +26,17 @@ public class AlbumControlleur {
     @ResponseStatus(HttpStatus.CREATED)
     public Album createAlbum(@RequestBody Album album)//Request body map les request json, pour transformer du json en java
     {
-        albumRepository.save(album);
+        albumService.creeAlbum(album);
         return album;
     }
 
 
     @RequestMapping(method = RequestMethod.DELETE, value="/{id}")//pas produces car on renvoit rien
     @ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal
-    public void deleteAlbum(@PathVariable Long id)
+    public void suppAlbum(@PathVariable Long id)
     {
         //delete les albums de l'artistes en prems
 
-        albumRepository.deleteById(id);
+        albumService.deleteAlbum(id);
     }
 }
