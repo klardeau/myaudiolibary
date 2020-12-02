@@ -9,4 +9,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     void deleteById(Long id);
     Album save(Album album);
+
+    boolean existsByTitle(String title);
 }
