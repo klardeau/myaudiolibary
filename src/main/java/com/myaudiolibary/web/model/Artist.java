@@ -35,6 +35,7 @@ public class Artist {
     }
 
     public Artist(){}
+
     public Set<Album> getAlbums() {
         return albums;
     }
