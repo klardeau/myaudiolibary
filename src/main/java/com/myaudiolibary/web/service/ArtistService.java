@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -30,8 +31,9 @@ public class ArtistService {
         return art.get();
     }
 
-    public Page<Artist> getArtistByName(@RequestParam(value="name") String name, @RequestParam(value="page") Integer page, @RequestParam(value="size") Integer size, @RequestParam(defaultValue="name") String sortProperty, @RequestParam(value="sortDirection", defaultValue="ASC") String sortDirection){
-        Page<Artist> lstArt = artistRepository.findByNameContainsIgnoreCase(name, PageRequest.of(page, size, Sort.Direction.fromString(sortDirection), sortProperty));
+    public ArrayList<Artist> getArtistByName(@RequestParam(value="name") String name){
+        //Page<Artist> lstArt = artistRepository.findByNameContainsIgnoreCase(name, PageRequest.of(page, size, Sort.Direction.fromString(sortDirection), sortProperty));
+        ArrayList<Artist> lstArt = artistRepository.findByNameContainsIgnoreCase(name);
         return lstArt;
     }
 

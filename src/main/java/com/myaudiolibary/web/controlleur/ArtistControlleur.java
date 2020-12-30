@@ -20,6 +20,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -41,22 +43,14 @@ public class ArtistControlleur {
     }
 
     @RequestMapping(params = {"name"},method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String avoirArtistByName(final ModelMap model, @RequestParam(value="name") String name, @RequestParam(value="page", defaultValue = "0") Integer page, @RequestParam(value="size", defaultValue = "10") Integer size, @RequestParam(defaultValue="name") String sortProperty, @RequestParam(value="sortDirection", defaultValue="ASC") String sortDirection){
-        Page<Artist> pageArt = artistService.getArtistByName(name, page, size, sortProperty, sortDirection);
+    public String avoirArtistByName(final ModelMap model, @RequestParam(value="name") String name){
+        ArrayList<Artist> pageArt = artistService.getArtistByName(name);
+
 
         model.addAttribute("artistes", pageArt);
-        //pageEmploye.has
-//        pageEmploye.getTotalElements();
-        //employes.totalElements =>
-        model.put("pageNumber", page + 1);
-        model.put("previousPage", page - 1);
-        model.put("nextPage", page + 1);
-        model.put("start", page * size + 1);
-        model.put("end", (page) * size + pageArt.getNumberOfElements());
-        model.put("nbTotPage", pageArt.getTotalPages()); //donne le nb total de page afin de limité la barre de changement de page
-        model.put("nbStr", pageArt.stream().count());//nb d'élément près découpé !
-        model.put("nbArtiste", pageArt.getTotalElements());//nb Artiste
-        return "listeArtists";
+
+
+        return "listeRecherche";
     }
     //public Page<Artist> getArtistByName(@RequestParam(value="name") String name, @RequestParam(value="page") Integer page, @RequestParam(value="size") Integer size, @RequestParam(defaultValue="name") String sortProperty, @RequestParam(value="sortDirection", defaultValue="ASC") String sortDirection){
 
@@ -82,14 +76,28 @@ public class ArtistControlleur {
         return "listeArtists";
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
+    @RequestMapping(value = "/ajoutArtist")
+    public String addArtPage(final ModelMap model){
+        Artist art= new Artist();
+        model.addAttribute("art",art);
+        return "ajoutArtist";
+    }
+
+    @PostMapping("/creeArtist")
+    public String creeArtist(@ModelAttribute("art") Artist art)//Request body map les request json, pour transformer du json en java
+    {
+        Artist arti = artistService.createArtist(art);
+        return "redirect:/";
+        //return "../artists?page=0&amp;size=10&amp;sortProperty=name&amp;sortDirection=ASC";
+    }
+
+    /*@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Artist creeArtist(@RequestBody Artist art)//Request body map les request json, pour transformer du json en java
     {
         Artist arti = artistService.createArtist(art);
         return arti;
-    }
-
+    }*/
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json", value="/{id}")//produces=MediaType.APPLICATION_JSON_VALUE
     public Artist modifArtist(@PathVariable Long id, @RequestBody Artist artist)
     {

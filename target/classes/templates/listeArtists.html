@@ -17,17 +17,17 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a href="#" class="navbar-brand">Librairie Audio</a>
+        <a href="../" class="navbar-brand">Librairie Audio</a>
       </div>
 
       <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#" class="nav-link">Liste des artistes</a></li>
+          <li class="active"><a href="/artists?page=0&amp;size=10&amp;sortProperty=name&amp;sortDirection=ASC" class="nav-link ember-view">Liste des artistes: [[${nbArtiste}]]</a></li>
         </ul>
 
-        <form role="search" class="navbar-form navbar-right">
+        <form role="search" class="navbar-form navbar-right" th:attr="action='/artists?'" method="GET">
           <div class="form-group">
-            <input type="text" placeholder="Rechercher par nom" class=" form-control">
+            <input name="name" type="text" placeholder="Rechercher par nom" class="ember-text-field form-control ember-view">
           </div>
           <button type="submit" class="btn btn-default">Rechercher</button>
         </form>
@@ -39,7 +39,7 @@
     <div class="row">
       <div class="col-lg-6">
         <h1>Liste des artistes</h1>
-        <a href="#" class="btn btn-primary">Nouvel artiste</a>
+        <a href="/artists/ajoutArtist" class="btn btn-primary">Nouvel artiste</a>
         <table class="table table-hover table-striped">
           <thead>
             <tr>
@@ -66,14 +66,14 @@
                 <a href="#" class="page-link">&laquo;</a>
               </li>
               <li class="page-item" th:if="${not #strings.equals(param.page,'0')}">
-                <a class="page-link" th:href="@{/artists(page=${previousPage}, size=${param.size}, sortDirection=${param.sortDirection}, sortProperty=${param.sortProperty})}"
+                <a class="page-link" th:href="@{/artists(page=${previousPage}, size=${10}, sortDirection=${param.sortDirection}, sortProperty=${param.sortProperty})}"
                 >
                   &laquo;
                 </a>
               </li>
               <li><a href="">Page [[${pageNumber}]]</a></li>
               <li class="page-item" th:if="${pageNumber} != ${nbTotPage}">
-                <a class="page-link" th:href="@{/artists(page=${nextPage}, size=${param.size}, sortDirection=${param.sortDirection}, sortProperty=${param.sortProperty})}">
+                <a class="page-link" th:href="@{/artists(page=${nextPage}, size=${10}, sortDirection=${param.sortDirection}, sortProperty=${param.sortProperty})}">
                   &raquo;
                 </a>
               </li>
