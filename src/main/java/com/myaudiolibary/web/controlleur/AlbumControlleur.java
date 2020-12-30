@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -24,21 +25,23 @@ public class AlbumControlleur {
 
 
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Album createAlbum(@RequestBody Album album)//Request body map les request json, pour transformer du json en java
+   // @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json")
+   // @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/createAlbum")
+    public RedirectView createAlbum(@ModelAttribute("album") Album album)//Request body map les request json, pour transformer du json en java
     {
         albumService.creeAlbum(album);
-        return album;
+        //return "../artists/"+album.getArtist().getId();
+        return new RedirectView("/artists/"+album.getArtist().getId());
     }
 
 
-    @RequestMapping(method = RequestMethod.DELETE, value="/{id}")//pas produces car on renvoit rien
-    @ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal
-    public void suppAlbum(@PathVariable Long id)
+    @RequestMapping(method = RequestMethod.GET, value="/{id}/{artid}/delete")//pas produces car on renvoit rien
+    public RedirectView suppAlbum(@PathVariable("id") Long id, @PathVariable("artid") int artid)
     {
         //delete les albums de l'artistes en prems
 
         albumService.deleteAlbum(id);
+        return new RedirectView("/artists/"+artid);
     }
 }

@@ -1,5 +1,6 @@
 package com.myaudiolibary.web.controlleur;
 
+import com.myaudiolibary.web.model.Album;
 import com.myaudiolibary.web.model.Artist;
 import com.myaudiolibary.web.repository.ArtistRepository;
 import com.myaudiolibary.web.service.ArtistService;
@@ -38,6 +39,9 @@ public class ArtistControlleur {
     public String avoirArtist(@PathVariable(value="id")Long id, final ModelMap model){
         Artist art = artistService.getArtist(id);
         //model.put("artist",art);
+        Album album= new Album();
+        album.setArtist(art);//on ajoute l'artiste à l'album
+        model.addAttribute("album",album);//pour créer des albums
         model.addAttribute("artist",art);
         return "detailArtist";
     }
@@ -105,13 +109,20 @@ public class ArtistControlleur {
         return artist;
     }
 
+    //@RequestMapping(method = RequestMethod.DELETE, value="/{id}")//pas produces car on renvoit rien
+    //    @ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal
     //le delete artist par id
-    @RequestMapping(method = RequestMethod.DELETE, value="/{id}")//pas produces car on renvoit rien
-    @ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal
-    public void suppArtist(@PathVariable Long id)
+    @RequestMapping(method = RequestMethod.GET, value="/{id}/delete")//pas produces car on renvoit rien
+    //@ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal///// FAIRE ATTENTION il empeche de renvoyer quelque chose
+    public RedirectView suppArtist(@PathVariable Long id)
     {
         artistService.deleteArtist(id);
+
+
+        return new RedirectView("/artists?page=0&size=10&sortProperty=name&sortDirection=ASC");//REDIRIGE TOI STP
     }
+
+
 
 
 

@@ -5,6 +5,8 @@
 	<title>IpiMdd050EvalWeb</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://bootswatch.com/3/journal/bootstrap.min.css">
+	<script src="/webjars/jquery/3.5.1/jquery.min.js" type="application/javascript"></script>
+	<script src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js" type="application/javascript"></script>
 </head>
 <body class="ember-application">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
@@ -50,33 +52,47 @@
 						<label for="performance" class="form-control-label">Albums</label>
 						<div class="row">
 							<div class="col-lg-10">
-								<div class="list-group" th:each="album : ${artist.getAlbums()}">
-									<li class="list-group-item" th:text="${album.getTitle()}"></li>
+								<div class="list-group">
+									<div th:each="album : ${artist.getAlbums()}">
+										<li class="list-group-item" th:text="${album.getTitle()}"></li>
+									</div>
+
 								</div>
 							</div>
+
+
+
 							<div class="col-lg-2 text-center">
 								<div class="list-group text-center">
-									<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>
-									<br>
-									<button class="btn-danger list-group-item list-group-item-action"><span class="glyphicon glyphicon-remove"></span></button>
+									<div th:each="album : ${artist.getAlbums()}">
+										<a class="btn-danger list-group-item list-group-item-action" th:href="'/albums/'+${album.getId()}+'/'+${artist.getId()}+'/delete'"><span class="glyphicon glyphicon-remove"></span></a>
+									</div>
 								</div>
 							</div>
+
+
+
 						</div>
 						<div class="row">
+							<form method="POST" action="" th:action="@{/albums/createAlbum}" th:object="${album}">
+
 							<div class="col-lg-10">
-								<input type="text" placeholder="Ajouter un album..." class="form-control ember-text-field ember-view">
+								<input type="hidden" th:field="*{artist}" />
+								<input type="text" name="title" th:field="*{title}" placeholder="Ajouter un album..." class="form-control ember-text-field ember-view">
 							</div>
 							<div class="col-lg-2 text-center">
-								<button class="btn-success list-group-item list-group-item-action"><span class="glyphicon glyphicon-plus"></span></button>
+								<button class="btn-success list-group-item list-group-item-action" type="submit" id="album" name="album"><span class="glyphicon glyphicon-plus"></span></button>
 
 							</div>
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<button disabled="" class="btn btn-primary">Enregistrer</button>
-				<button class="btn btn-danger">Supprimer</button>
+				<a class="btn btn-danger" th:href="'/artists/'+${artist.getId()}+'/delete'">Supprimer</a><!--th:href="@{/artists/suppArtist/{id}(id=${artist.id})/delete}"-->
+
 			</div>
 		</div>
 	</div>
