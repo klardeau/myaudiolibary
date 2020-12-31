@@ -39,8 +39,12 @@ public class ArtistControlleur {
     public String avoirArtist(@PathVariable(value="id")Long id, final ModelMap model){
         Artist art = artistService.getArtist(id);
         //model.put("artist",art);
-        Album album= new Album();
+        Album album= new Album();//pour ajout et delete album
         album.setArtist(art);//on ajoute l'artiste à l'album
+//test modif
+        //Artist artModif = new Artist();
+        //artModif.setId(art.getId());//on recup l'id artiste en cours
+        //model.addAttribute("artModif", artModif);
         model.addAttribute("album",album);//pour créer des albums
         model.addAttribute("artist",art);
         return "detailArtist";
@@ -102,24 +106,23 @@ public class ArtistControlleur {
         Artist arti = artistService.createArtist(art);
         return arti;
     }*/
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json", value="/{id}")//produces=MediaType.APPLICATION_JSON_VALUE
-    public Artist modifArtist(@PathVariable Long id, @RequestBody Artist artist)
+    //@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json", value="/{id}/update")//produces=MediaType.APPLICATION_JSON_VALUE
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json", value="/{id}/{artModif}/update")
+    public RedirectView modifArtist(@PathVariable Long id, @PathVariable("artModif") Artist artModif)
     {
-        Artist art = artistService.updateArtist(id,artist);
-        return artist;
+        artistService.updateArtist(id, artModif);
+        return new RedirectView("/artists/"+artModif.getId());
     }
 
-    //@RequestMapping(method = RequestMethod.DELETE, value="/{id}")//pas produces car on renvoit rien
-    //    @ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal
+
     //le delete artist par id
     @RequestMapping(method = RequestMethod.GET, value="/{id}/delete")//pas produces car on renvoit rien
-    //@ResponseStatus(HttpStatus.NO_CONTENT)//204 sa ses bien passé je te renvoie rien mais c'est normal///// FAIRE ATTENTION il empeche de renvoyer quelque chose
     public RedirectView suppArtist(@PathVariable Long id)
     {
         artistService.deleteArtist(id);
 
 
-        return new RedirectView("/artists?page=0&size=10&sortProperty=name&sortDirection=ASC");//REDIRIGE TOI STP
+        return new RedirectView("/artists?page=0&size=10&sortProperty=name&sortDirection=ASC");
     }
 
 

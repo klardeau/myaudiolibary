@@ -53,7 +53,7 @@ public class ArtistService {
         artistRepository.save(art);
         return art;
     }
-
+/*
     public Artist updateArtist(@PathVariable Long id, @RequestBody Artist artist)
     {
         if(!artistRepository.existsById(id)){
@@ -64,7 +64,18 @@ public class ArtistService {
         }
         artistRepository.save(artist);
         return artist;
+    }*/
+public Artist updateArtist(Long id, @RequestBody Artist artist)
+{
+    if(!artistRepository.existsById(id)){
+        throw new EntityNotFoundException("L'artiste d'identifiant: "+id+" n'a pas été trouvé !");
     }
+    if(artistRepository.existsByName(artist.getName())){//retourn un boolean true ou false si true exception si false il crée
+        throw new EntityExistsException("Un artiste de nom: "+artist.getName()+" existe deja!");//on évite que les petis malins nous clone des artistes à partir de d'autre artiste
+    }
+    artistRepository.save(artist);
+    return artist;
+}
 
     public void deleteArtist(@PathVariable Long id)
     {
