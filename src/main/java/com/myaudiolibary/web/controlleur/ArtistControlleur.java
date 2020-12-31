@@ -53,8 +53,6 @@ public class ArtistControlleur {
     @RequestMapping(params = {"name"},method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String avoirArtistByName(final ModelMap model, @RequestParam(value="name") String name){
         ArrayList<Artist> pageArt = artistService.getArtistByName(name);
-
-
         model.addAttribute("artistes", pageArt);
 
 
@@ -107,11 +105,11 @@ public class ArtistControlleur {
         return arti;
     }*/
     //@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json", value="/{id}/update")//produces=MediaType.APPLICATION_JSON_VALUE
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces="application/json", value="/{id}/{artModif}/update")
-    public RedirectView modifArtist(@PathVariable Long id, @PathVariable("artModif") Artist artModif)
+    @PostMapping(value="/update/{id}")
+    public RedirectView modifArtist(@PathVariable Long id, @ModelAttribute("artist") Artist artist)
     {
-        artistService.updateArtist(id, artModif);
-        return new RedirectView("/artists/"+artModif.getId());
+        artistService.updateArtist(artist.getId(), artist);
+        return new RedirectView("/artists/"+artist.getId());
     }
 
 
